@@ -14,3 +14,6 @@ python plot.py && python plot_extra.py            # results.png, fig_per_seed.pn
 Seeds are fixed, but GPU nondeterminism means exact numbers may differ slightly; the qualitative picture (chance vs 1.0; sort+NoPE extrapolation) should hold.
 
 Diagrams: `dot -Tpng -Gdpi=160 diagrams/01_workflow.dot -o diagrams/01_workflow.png`
+
+# homa-triadic-attention (~25 min; N=16/24 slow)
+cd homa-triadic-attention && python experiment.py && python long.py && python plot.py  # note: experiment.py writes results.json; results_3000steps.json is the committed copy

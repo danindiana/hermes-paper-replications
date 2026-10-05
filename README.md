@@ -5,6 +5,7 @@ Small-scale empirical replications of two transformer-theory papers, driven by *
 | Experiment | Paper | Headline result |
 |---|---|---|
 | [`parity-cot/`](parity-cot/) | Kim & Suzuki, *Transformers Provably Solve Parity Efficiently with Chain of Thought* (ICLR 2025) | Direct learning of k-parity falls to chance for (n=32,k=6) and n=64 (k=4,6); teacher-forced CoT reaches 1.00 held-out accuracy in every setting |
+| [`homa-triadic-attention/`](homa-triadic-attention/) | Amiraslani & Gao, *Beyond Pairwise Attention: Higher-Order Modular Attention* ([arXiv:2603.11133](https://arxiv.org/abs/2603.11133)) | One-layer triadic attention beats pairwise on MATCH3 at N=8 (balanced acc 0.815 vs 0.749) but the gap vanishes by N=12 and nothing is learned at N>=16 in our budget; simplified HOMA shows no fusion benefit |
 | [`length-generalization/`](length-generalization/) | Zhou et al., *What Algorithms can Transformers Learn? A Study in Length Generalization* ([arXiv:2310.16028](https://arxiv.org/abs/2310.16028)) | Trained on lengths 1-20: sort with no positional encoding still gets 0.8 exact match at length 60; learned-absolute and RoPE models fail past ~25 |
 
 ![experiments](diagrams/04_experiments.png)
@@ -53,6 +54,20 @@ The agent's first script measured accuracy **on the training set**. Direct learn
 
 Caveats: 2 seeds; no index hints from the paper; teacher-forced argmax exact match, not free-running generation.
 
+## Experiment 3 - triadic (higher-order) attention on MATCH3
+One attention layer (d=64, 4 heads) comparing pairwise, full triadic, and a simplified HOMA-style fusion on Sanford et al.'s MATCH3 (does any pair of tokens sum with x_i to 0 mod M?). Balanced accuracy on fresh held-out data, 2 seeds:
+
+| N | pairwise | triadic | HOMA-style |
+|---|---|---|---|
+| 8 (20k steps) | 0.749 | **0.815** | - |
+| 12 (20k steps) | 0.665 | 0.671 | - |
+| 8 (3k steps) | 0.745 | 0.754 | 0.751 |
+| 24 (3k steps) | 0.510 | 0.505 | 0.506 |
+
+![homa](homa-triadic-attention/results.png)
+
+Triadic helps where it was learnable, but no model solved MATCH3 at this width/budget, so the paper's constant-width claim is *not* reproduced (see [`homa-triadic-attention/RESULTS.md`](homa-triadic-attention/RESULTS.md) for caveats: label rate ~0.3, simplified HOMA, no TAPE/parity). Hermes (qwen3.8:27b) crashed on a `torch.index_put_` type error and did not recover; the reference implementation is hand-written.
+
 ## What Hermes could and couldn't do
 Full log in [`docs/hermes-reliability.md`](docs/hermes-reliability.md).
 
@@ -61,6 +76,7 @@ Full log in [`docs/hermes-reliability.md`](docs/hermes-reliability.md).
 - **qwen3.8:27b** (partly CPU-offloaded): wrote a coherent 430-line experiment, but with the train-set accuracy bug; very slow.
 - **qwen3.5:9b**: syntax errors, then offered to "generate placeholder results". Declined.
 - **devstral-small-2:24b-196k**: a different bug per run (padding, attention-mask shape, invalid kwarg), RoPE applied to embeddings rather than attention, then "Task completed" with no results. Its attempt is preserved in `length-generalization/hermes_attempt/`; the working experiment was written by hand.
+- **qwen3.8:27b again (HOMA task)**: a 131-line script that crashed in the data generator on a bool-vs-tensor `index_put_` error; stopped after not recovering.
 - Resource contention matters: a resident Ollama model filled GPU 0, so the first experiment run OOM'd until pinned to GPU 1 ([diagram](diagrams/03_gpu_layout.png)).
 
 Take-away: local agents are good at drafting experiment code and bad at noticing their own methodology errors or admitting non-completion. Always read the eval code and the raw results.
@@ -70,6 +86,7 @@ See [`docs/reproduce.md`](docs/reproduce.md). Each `experiment.py` is self-conta
 
 ## Layout
 ```
+homa-triadic-attention/  experiment.py (3k steps), long.py (20k steps), plot.py, results*.json, RESULTS.md, hermes_attempt/
 parity-cot/              experiment.py (v2, held-out), experiment_v1_trainacc.py, results*.json, figures, RESULTS.md, task.md (prompt given to Hermes)
 length-generalization/   experiment.py, plot*.py, results.json, figures, RESULTS.md, task.md, hermes_attempt/
 diagrams/                Graphviz sources + png/svg

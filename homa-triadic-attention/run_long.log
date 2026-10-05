@@ -1,0 +1,8 @@
+8 pairwise 0 {'acc': 0.829, 'pos_rate': 0.34, 'bal_acc': 0.749, 'final_loss': 0.448} 23s
+8 pairwise 1 {'acc': 0.831, 'pos_rate': 0.337, 'bal_acc': 0.75, 'final_loss': 0.422} 45s
+8 triadic 0 {'acc': 0.874, 'pos_rate': 0.34, 'bal_acc': 0.815, 'final_loss': 0.366} 76s
+8 triadic 1 {'acc': 0.875, 'pos_rate': 0.337, 'bal_acc': 0.814, 'final_loss': 0.352} 106s
+12 pairwise 0 {'acc': 0.79, 'pos_rate': 0.314, 'bal_acc': 0.665, 'final_loss': 0.483} 340s
+12 pairwise 1 {'acc': 0.792, 'pos_rate': 0.31, 'bal_acc': 0.664, 'final_loss': 0.495} 577s
+12 triadic 0 {'acc': 0.794, 'pos_rate': 0.314, 'bal_acc': 0.673, 'final_loss': 0.475} 899s
+12 triadic 1 {'acc': 0.794, 'pos_rate': 0.31, 'bal_acc': 0.668, 'final_loss': 0.491} 1221s

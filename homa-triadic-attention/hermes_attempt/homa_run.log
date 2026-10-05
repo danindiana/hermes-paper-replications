@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/workspace/homa/experiment.py", line 131, in <module>
+    main()
+  File "/workspace/homa/experiment.py", line 122, in main
+    r = run(kind, N, seed)
+        ^^^^^^^^^^^^^^^^^^
+  File "/workspace/homa/experiment.py", line 97, in run
+    x, y = make_batch(BATCH, N, M, g)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/homa/experiment.py", line 31, in make_batch
+    torch.index_put_(ps, (xg[:, :, None], xg[:, None, :]), True)
+TypeError: index_put_(): argument 'values' (position 3) must be Tensor, not bool
