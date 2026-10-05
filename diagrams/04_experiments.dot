@@ -1,0 +1,15 @@
+digraph g {
+graph [bgcolor="#0d1117", rankdir=LR, fontname="Helvetica", fontcolor="#e6edf3", labelloc="t", fontsize=20, label="Experiments at a glance"];
+node [fontname="Helvetica", fontcolor="#e6edf3", color="#30363d", style="filled,rounded", shape=box, penwidth=2, margin="0.25,0.18", fillcolor="#161b22"];
+edge [color="#8b949e", fontname="Helvetica", fontcolor="#adbac7", penwidth=1.6, arrowsize=0.9];
+subgraph cluster_a { label="parity-cot  (Kim & Suzuki, ICLR 2025)"; fontcolor="#58a6ff"; color="#58a6ff"; style="rounded";
+  a1 [label="1-layer transformer d=64\nn in {16,32,64}, k in {4,6}\n300 steps, 3 seeds"];
+  a2 [label="direct  vs  CoT teacher-forced\n(held-out accuracy)", color="#58a6ff", fillcolor="#13294d"];
+  a3 [label="Direct hits chance at n=32,k=6\nand n=64; CoT = 1.00 everywhere", color="#3fb950"];
+  a1 -> a2 -> a3; }
+subgraph cluster_b { label="length-generalization  (Zhou et al. 2023)"; fontcolor="#bc8cff"; color="#bc8cff"; style="rounded,dashed";
+  b1 [label="4-layer decoder d=128\ntrain len 1-20, test to 60\ncopy / reverse / sort, 2 seeds"];
+  b2 [label="learned abs  vs  RoPE  vs  NoPE\n(exact match, held-out)", color="#58a6ff", fillcolor="#13294d"];
+  b3 [label="Sort+NoPE: 0.8 at len 60\nOthers fail beyond ~25-30", color="#d29922"];
+  b1 -> b2 -> b3; }
+}

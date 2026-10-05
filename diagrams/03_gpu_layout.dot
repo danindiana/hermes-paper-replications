@@ -1,0 +1,13 @@
+digraph g {
+graph [bgcolor="#0d1117", rankdir=LR, fontname="Helvetica", fontcolor="#e6edf3", labelloc="t", fontsize=20, label="GPU layout during the runs"];
+node [fontname="Helvetica", fontcolor="#e6edf3", color="#30363d", style="filled,rounded", shape=box, penwidth=2, margin="0.25,0.18", fillcolor="#161b22"];
+edge [color="#8b949e", fontname="Helvetica", fontcolor="#adbac7", penwidth=1.6, arrowsize=0.9];
+rankdir=TB;
+subgraph cluster_g0 { label="GPU 0 (16 GB)"; fontcolor="#f0883e"; color="#f0883e"; style="rounded";
+  ol [label="Ollama resident model\n(27B / 24B + big KV cache)\nfills ~15 GB", color="#f0883e"]; }
+subgraph cluster_g1 { label="GPU 1 (12 GB, ~5 GB free)"; fontcolor="#3fb950"; color="#3fb950"; style="rounded";
+  exp [label="experiment.py\nin hermes sandbox\n(<1 GB)", color="#3fb950"]; }
+oom [label="First attempt on GPU 0:\nCUDA out of memory\n(12 failed runs)", color="#f85149"];
+ol -> oom [label="no headroom", color="#f85149"];
+oom -> exp [label="rerun with\nCUDA_VISIBLE_DEVICES=1", color="#3fb950"];
+}

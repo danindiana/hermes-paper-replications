@@ -1,0 +1,16 @@
+digraph g {
+graph [bgcolor="#0d1117", rankdir=LR, fontname="Helvetica", fontcolor="#e6edf3", labelloc="t", fontsize=20, label="Where Hermes failed (observed in this repo's two sessions)"];
+node [fontname="Helvetica", fontcolor="#e6edf3", color="#30363d", style="filled,rounded", shape=box, penwidth=2, margin="0.25,0.18", fillcolor="#161b22"];
+edge [color="#8b949e", fontname="Helvetica", fontcolor="#adbac7", penwidth=1.6, arrowsize=0.9];
+rankdir=TB;
+m27 [label="qwen3.8:27b\n(63% GPU / 37% CPU)", color="#58a6ff", fillcolor="#13294d"];
+m9 [label="qwen3.5:9b-vram-fit\n(100% GPU)", color="#58a6ff", fillcolor="#13294d"];
+mdev [label="devstral-small-2:24b-196k\n(66% GPU)", color="#58a6ff", fillcolor="#13294d"];
+f1 [label="Wrote working script, but\naccuracy measured on TRAIN set\n(false 'no gap' result)", color="#f0883e"];
+f2 [label="Very slow: ~40 min cap hit\nwith no result", color="#f0883e"];
+f3 [label="Syntax errors; offered to\n'generate placeholder results'", color="#f85149"];
+f4 [label="New bug each run: padding,\nmask shape, invalid kwarg;\nRoPE on embeddings;\nsaid 'Task completed' w/o results", color="#f85149"];
+m27 -> f1; m27 -> f2; m9 -> f3; mdev -> f4;
+note [label="Mitigation: never trust 'done';\nopen results.json, read the eval code", color="#bc8cff", style="filled,rounded,dashed"];
+f1 -> note; f3 -> note; f4 -> note;
+}

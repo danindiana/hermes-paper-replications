@@ -1,0 +1,16 @@
+digraph g {
+graph [bgcolor="#0d1117", rankdir=LR, fontname="Helvetica", fontcolor="#e6edf3", labelloc="t", fontsize=20, label="Replication workflow: paper to verified result"];
+node [fontname="Helvetica", fontcolor="#e6edf3", color="#30363d", style="filled,rounded", shape=box, penwidth=2, margin="0.25,0.18", fillcolor="#161b22"];
+edge [color="#8b949e", fontname="Helvetica", fontcolor="#adbac7", penwidth=1.6, arrowsize=0.9];
+paper [label="Paper PDF\n(local library)", color="#3fb950"];
+task [label="task.md prompt\n(scope, GPU rules,\nheld-out eval rule)", color="#3fb950"];
+hermes [label="Hermes Agent\nlocal Ollama model\nDocker sandbox", color="#58a6ff", fillcolor="#13294d"];
+code [label="experiment.py", color="#58a6ff", fillcolor="#13294d"];
+run [label="Run on GPU 1\nCUDA_VISIBLE_DEVICES=1", color="#39c5cf", fillcolor="#0d2e2e"];
+audit [label="Human/Claude audit\nread code + results.json", color="#bc8cff"];
+bug [label="Bug found?\ntrain-set accuracy,\nmisapplied RoPE", color="#f85149"];
+res [label="results.json\nplots, RESULTS.md", color="#d29922"];
+paper -> task -> hermes -> code -> run -> audit;
+audit -> bug [label="yes"]; bug -> code [label="patch / rewrite", color="#f85149", style=dashed];
+audit -> res [label="no", color="#3fb950"];
+}

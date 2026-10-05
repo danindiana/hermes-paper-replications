@@ -1,0 +1,16 @@
+
+=== Task: copy, Pos: learned, Seed: 42 ===
+Traceback (most recent call last):
+  File "/workspace/lengthgen/experiment.py", line 265, in <module>
+    results = run_experiment()
+              ^^^^^^^^^^^^^^^^
+  File "/workspace/lengthgen/experiment.py", line 240, in run_experiment
+    model = train_model(task, pos_type, seed, device)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lengthgen/experiment.py", line 199, in train_model
+    model = TransformerModel(vocab_size, d_model=128, nhead=4, num_layers=4, 
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/lengthgen/experiment.py", line 65, in __init__
+    encoder_layer = nn.TransformerEncoderLayer(d_model, nhead, d_model*4, 0.1, batch_first=True,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: TransformerEncoderLayer.__init__() got an unexpected keyword argument 'enable_nested_tensor'
